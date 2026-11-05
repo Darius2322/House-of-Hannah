@@ -1,0 +1,22 @@
+{
+  "name": "House of Hannah — All Laundry Services",
+  "short_name": "House of Hannah",
+  "description": "Book laundry, track your request, and reach House of Hannah.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0B0B0B",
+  "theme_color": "#0B0B0B",
+  "categories": ["business", "lifestyle"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Book a Service", "url": "/booking", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Track My Request", "url": "/track", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

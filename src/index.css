@@ -1,0 +1,38 @@
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: #fff;
+  color: #0B0B0B;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img { max-width: 100%; }
+a { color: inherit; }
+::selection { background: #D4AF37; color: #0B0B0B; }
+
+/* Visible keyboard focus everywhere, without changing mouse behaviour. */
+:focus-visible { outline: 2px solid #D4AF37; outline-offset: 2px; border-radius: 4px; }
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline-offset: 0; }
+
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Gentle entrance for image sections — fade + slight rise, never a bounce. */
+.hoh-fade-in { animation: hoh-fade-in-kf 700ms ease both; }
+@keyframes hoh-fade-in-kf { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Honeypot field: off-screen, not display:none (some bots skip hidden fields). */
+.hp-field { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  header, footer { display: none !important; }
+  body { background: #fff; }
+}
