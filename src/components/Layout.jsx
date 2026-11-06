@@ -6,7 +6,7 @@ import {
   CalendarPlus, Search, ClipboardCheck, Image as ImageIcon, Info, Star,
   Mail, Share2, Tag,
 } from "lucide-react";
-import { C, BRAND, PHONE_DISPLAY, PHONE_INTL, WA_BASE, WA_GREETING, DEVELOPER_CREDIT, FONT_DISPLAY } from "../lib/constants";
+import { C, BRAND, PHONE_DISPLAY, PHONE_INTL, WA_BASE, WA_GREETING, DEVELOPER_CREDIT, FONT_DISPLAY, PUBLIC_SITE_URL } from "../lib/constants";
 import { useBusinessSettings, formatHoursLine } from "../lib/useBusinessSettings";
 import { SOCIAL_ICON_COMPONENTS } from "./SocialIcons";
 import { Button } from "./UI";
@@ -92,7 +92,7 @@ export function NavBar() {
   }
 
   async function shareThisSite() {
-    const shareData = { title: BRAND.name, text: `${BRAND.name} — ${BRAND.tagline}. Washing, ironing, dry cleaning, pickup & delivery.`, url: window.location.origin };
+    const shareData = { title: BRAND.name, text: `${BRAND.name} — ${BRAND.tagline}. Washing, ironing, dry cleaning, pickup & delivery.`, url: PUBLIC_SITE_URL };
     if (navigator.share) {
       try { await navigator.share(shareData); } catch { /* user cancelled the share sheet */ }
       return;

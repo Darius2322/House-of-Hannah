@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { supabase } from "../lib/supabaseClient";
 import { useStaffSession, signOut } from "../lib/auth";
-import { C, STATUS_FLOW, fmtDate, fmtDateTime, normalizeKenyanPhone } from "../lib/constants";
+import { trackingLink, C, STATUS_FLOW, fmtDate, fmtDateTime, normalizeKenyanPhone } from "../lib/constants";
 import { Button, Section, H2, Badge, Select, TextInput, TextArea, Spinner, EmptyState, Field, PasswordInput } from "../components/UI";
 import { Logo } from "../components/Layout";
 import { ChangePasswordModal } from "../components/ChangePasswordModal";
@@ -376,7 +376,7 @@ function RequestsTab({ profile }) {
                     <button onClick={(e) => { e.stopPropagation(); navigator.clipboard?.writeText(r.public_request_number); }} title="Copy request number" style={{ background: "none", border: "none", cursor: "pointer", color: "#7A7466", display: "flex", padding: 2 }}>
                       <Copy size={13} />
                     </button>
-                    <button onClick={(e) => { e.stopPropagation(); window.open(`https://wa.me/${normalizeKenyanPhone(r.phone_display)}?text=${encodeURIComponent(`Hello ${r.customer_name}, your House of Hannah request ${r.public_request_number} — track it here: ${window.location.origin}/track?request=${r.public_request_number}`)}`, "_blank", "noopener,noreferrer"); }} title="Send tracking link to customer via WhatsApp" style={{ background: "none", border: "none", cursor: "pointer", color: "#25D366", display: "flex", padding: 2 }}>
+                    <button onClick={(e) => { e.stopPropagation(); window.open(`https://wa.me/${normalizeKenyanPhone(r.phone_display)}?text=${encodeURIComponent(`Hello ${r.customer_name}, your House of Hannah request ${r.public_request_number} — track it here: ${trackingLink(r.public_request_number)}`)}`, "_blank", "noopener,noreferrer"); }} title="Send tracking link to customer via WhatsApp" style={{ background: "none", border: "none", cursor: "pointer", color: "#25D366", display: "flex", padding: 2 }}>
                       <MessageCircle size={14} />
                     </button>
                   </div>

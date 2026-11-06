@@ -12,6 +12,12 @@ export const BRAND = {
 // the international form (no "+", no leading zero).
 export const PHONE_DISPLAY = "0745 604 435";
 export const PHONE_INTL = "254745604435";
+// The customer website's address. Every link a customer receives (tracking links, QR codes, WhatsApp
+// messages) uses this, so links created from the staff site still open the public site.
+// Set VITE_SITE_URL in each deployment; the fallback is the live public address.
+export const PUBLIC_SITE_URL = (import.meta.env.VITE_SITE_URL || "https://house-of-hannah.vercel.app").replace(/\/+$/, "");
+export const trackingLink = (requestNumber) => `${PUBLIC_SITE_URL}/track?request=${encodeURIComponent(requestNumber)}`;
+
 export const WA_BASE = `https://wa.me/${PHONE_INTL}`;
 export const WA_GREETING = `Hello ${BRAND.name}, I would like to ask about your laundry services.`;
 

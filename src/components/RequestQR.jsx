@@ -1,3 +1,4 @@
+import { trackingLink } from "../lib/constants";
 import React, { useEffect, useRef } from "react";
 import { C } from "../lib/constants";
 
@@ -6,7 +7,7 @@ import { C } from "../lib/constants";
 // number prefilled; the customer must still enter their phone/email to see
 // anything sensitive (see Track.jsx + track_request() RPC).
 export function trackingUrl(requestNumber) {
-  return `${window.location.origin}/track?request=${encodeURIComponent(requestNumber)}`;
+  return trackingLink(requestNumber);
 }
 
 export function RequestQR({ requestNumber, size = 132, caption = "Scan to track your laundry" }) {

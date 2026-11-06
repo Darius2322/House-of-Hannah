@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Search, Loader2, CheckCircle2, Circle, X, MessageCircle, Phone, Copy, Check, Share2 } from "lucide-react";
 import { supabase } from "../lib/supabaseClient";
-import { C, BRAND, PHONE_INTL, WA_BASE, STATUS_FLOW, fmtDate, fmtDateTime, isValidKenyanMobile } from "../lib/constants";
+import { PUBLIC_SITE_URL, C, BRAND, PHONE_INTL, WA_BASE, STATUS_FLOW, fmtDate, fmtDateTime, isValidKenyanMobile } from "../lib/constants";
 import { Field, TextInput, Button, Chip, Section, Eyebrow, H2 } from "../components/UI";
 import { TicketCard, DocumentActions } from "../components/Ticket";
 import { ReturnPreferencePicker, ReviewModal } from "../components/TrackExtras";
@@ -20,7 +20,7 @@ export default function TrackPage() {
   const [showReview, setShowReview] = useState(false);
 
   async function shareThisRequest() {
-    const shareData = { title: BRAND.name, text: `My laundry request ${result.public_request_number} is all done — thanks ${BRAND.name}!`, url: window.location.origin };
+    const shareData = { title: BRAND.name, text: `My laundry request ${result.public_request_number} is all done — thanks ${BRAND.name}!`, url: PUBLIC_SITE_URL };
     if (navigator.share) {
       try { await navigator.share(shareData); } catch {}
       return;

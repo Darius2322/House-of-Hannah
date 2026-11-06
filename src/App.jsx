@@ -16,7 +16,7 @@ const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 import WorkerLogin from "./pages/WorkerLogin";
 const WorkerDashboard = lazy(() => import("./pages/WorkerDashboard"));
 import { Spinner } from "./components/UI";
-import { BRAND } from "./lib/constants";
+import { BRAND, PUBLIC_SITE_URL } from "./lib/constants";
 
 function PublicLayout({ children }) {
   return (
@@ -86,6 +86,14 @@ function usePageMeta(pathname, isPrivate) {
   }, [pathname, isPrivate]);
 }
 
+// Customer pages don't exist on the staff site — send old/shared links to the public website,
+// keeping the path and query (e.g. /track?request=HOH-2026-337538).
+function ToPublicSite() {
+  const loc = useLocation();
+  useEffect(() => { window.location.replace(`${PUBLIC_SITE_URL}${loc.pathname}${loc.search}`); }, [loc]);
+  return <Spinner />;
+}
+
 function NotFound() {
   return (
     <div style={{ maxWidth: 520, margin: "0 auto", padding: "90px 20px", textAlign: "center" }}>
@@ -118,6 +126,8 @@ function Shell() {
           <>
             <Route path="/" element={<Navigate to="/admin" replace />} />
             {staffRoutes}
+            <Route path="/track" element={<ToPublicSite />} />
+            <Route path="/confirmation/:requestNumber" element={<ToPublicSite />} />
           </>
         ) : (
           <>
