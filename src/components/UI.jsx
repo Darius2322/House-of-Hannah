@@ -43,12 +43,12 @@ export function Chip({ active, onClick, children, disabled }) {
 
 export function Field({ label, required, children, hint }) {
   return (
-    <div style={{ marginBottom: 18 }}>
-      <label style={{ display: "block", fontFamily: FONT_BODY, fontWeight: 600, fontSize: 13.5, color: C.ink, marginBottom: 7 }}>
+    <div style={{ marginBottom: 24 }}>
+      <label style={{ display: "block", fontFamily: FONT_BODY, fontWeight: 600, fontSize: 14, color: C.ink, marginBottom: 9 }}>
         {label} {required && <span style={{ color: "#D64545" }}>*</span>}
       </label>
       {children}
-      {hint && <div style={{ fontSize: 12, color: "#7A7466", marginTop: 5 }}>{hint}</div>}
+      {hint && <div style={{ fontSize: 12.5, color: "#7A7466", marginTop: 7, lineHeight: 1.45 }}>{hint}</div>}
     </div>
   );
 }

@@ -17,9 +17,8 @@ export const WA_GREETING = `Hello ${BRAND.name}, I would like to ask about your 
 
 // Optional developer credit shown in the footer. Set to null to hide it.
 export const DEVELOPER_CREDIT = {
-  name: "Darius",
-  phone: "0110554040",
-  email: "dariusmomanyi678@gmail.com",
+  name: "dmnsolutions.co.ke",
+  url: "https://dmnsolutions.co.ke",
 };
 
 // ---------------------------------------------------------------------------

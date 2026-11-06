@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Truck, MessageCircle, ArrowRight, ClipboardList, Search, Check, ChevronRight, Droplets, Wind, Shirt } from "lucide-react";
+import { Truck, MessageCircle, ArrowRight, ClipboardList, Search, Check, ChevronRight, Droplets, Wind, Shirt, Tag } from "lucide-react";
 import { supabase } from "../lib/supabaseClient";
 import { C, BRAND, WA_BASE, WA_GREETING, FONT_DISPLAY, formatPrice } from "../lib/constants";
 import { Button, Section, Eyebrow, H2 } from "../components/UI";
@@ -32,7 +32,7 @@ function PricePreview() {
         </div>
         <Button variant="dark" onClick={() => nav("/pricing")}>Full Price List <ChevronRight size={16} /></Button>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(210px,1fr))", gap: 14 }}>
+      <div className="hoh-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(210px,1fr))", gap: 14 }}>
         {rows.map((r) => (
           <div key={r.id} style={{ border: "1px solid rgba(212,175,55,0.45)", borderRadius: 14, padding: "20px 18px", background: "rgba(255,255,255,0.03)" }}>
             <div style={{ color: "#E6DFCB", fontSize: 13.5, fontWeight: 600, marginBottom: 8, letterSpacing: 0.4 }}>{r.name}</div>
@@ -50,6 +50,14 @@ export default function Home() {
 
   return (
     <div>
+      <style>{`
+        /* Phones: always two cards per row, with tighter padding so nothing feels cramped. */
+        @media (max-width: 640px) {
+          .hoh-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
+          .hoh-grid-2 > * { padding: 16px 14px !important; min-width: 0; }
+          .hoh-grid-2 > * > div:first-child { margin-bottom: 8px; }
+        }
+      `}</style>
       <HeroSlideshow>
         <div style={{ maxWidth: 1080, margin: "0 auto", padding: "84px 20px" }}>
           <div style={{ maxWidth: 600 }}>
@@ -72,11 +80,12 @@ export default function Home() {
       </HeroSlideshow>
 
       <Section>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 16 }} className="hoh-grid-2">
           {[
             { icon: ClipboardList, title: "Book a Service", desc: "Start a new laundry request in minutes.", action: () => startBooking() },
             { icon: Search, title: "Track My Request", desc: "Check the status of laundry you've already sent.", action: () => nav("/track") },
             { icon: Truck, title: "Pickup & Delivery", desc: "See how collection and delivery works.", action: () => nav("/pickup-delivery") },
+            { icon: Tag, title: "Price List", desc: "See what every service costs.", action: () => nav("/pricing") },
           ].map(({ icon: Icon, title, desc, action }) => (
             <button key={title} onClick={action} style={{ cursor: "pointer", textAlign: "left", background: "#fff", border: "1px solid #E8E0CC", borderRadius: 14, padding: 22, font: "inherit" }}>
               <div style={{ width: 42, height: 42, borderRadius: 10, background: C.ink, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}><Icon size={20} color={C.gold} /></div>
@@ -90,7 +99,7 @@ export default function Home() {
       <Section bg={C.ivory}>
         <Eyebrow>What We Offer</Eyebrow>
         <H2>All laundry services, under one roof</H2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 14, marginTop: 24 }}>
+        <div className="hoh-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 14, marginTop: 24 }}>
           {CORE_OFFER.map((s) => (
             <button key={s.title} onClick={() => (s.path ? nav(s.path) : startBooking(s.slug))} style={{ cursor: "pointer", textAlign: "left", background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #E8E0CC", font: "inherit" }}>
               <s.icon size={26} color={C.accent} style={{ marginBottom: 12 }} />
@@ -107,7 +116,7 @@ export default function Home() {
       <Section>
         <Eyebrow>How It Works</Eyebrow>
         <H2>From basket to done</H2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 16, marginTop: 24 }}>
+        <div className="hoh-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 16, marginTop: 24 }}>
           {["Choose a service", "Tell us the details", "Drop off or request pickup", "Get your request number", "Track progress online", "Collect, fresh & folded"].map((t, i) => (
             <div key={t} style={{ background: "#fff", border: "1px solid #E8E0CC", borderRadius: 14, padding: 18 }}>
               <div style={{ width: 32, height: 32, borderRadius: "50%", background: C.ink, color: C.goldLight, border: `1px solid ${C.gold}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 14, marginBottom: 10 }}>{i + 1}</div>
@@ -120,7 +129,7 @@ export default function Home() {
       <Section bg={C.ivory}>
         <Eyebrow>Why {BRAND.name}</Eyebrow>
         <H2>Care you can see in every load</H2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(210px,1fr))", gap: 18, marginTop: 20 }}>
+        <div className="hoh-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(210px,1fr))", gap: 18, marginTop: 20 }}>
           {[["Deep Cleaning", "Removes dirt, stains and odours"], ["Safe on All Fabrics", "Gentle care for every fabric"], ["Quick Turnaround", "Fast service, always on time"], ["Quality You Can See", "Spotless results every time"]].map(([t, d]) => (
             <div key={t} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
               <div style={{ width: 38, height: 38, borderRadius: "50%", background: C.ink, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Check size={18} color={C.gold} /></div>

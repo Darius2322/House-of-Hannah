@@ -9,6 +9,29 @@ import { metaFor } from "../lib/serviceMeta";
 
 const STEP_LABELS = ["Service", "Details", "Fulfillment", "Contact", "Review"];
 
+// Soft panel that groups related fields so the form has breathing room.
+function Panel({ children }) {
+  return <div style={{ background: C.ivory, border: "1px solid #EDE6D3", borderRadius: 14, padding: "22px 18px 4px", marginBottom: 18 }}>{children}</div>;
+}
+
+// Optional fields live in one tidy, collapsible block (nothing is removed — it simply starts closed).
+function MoreDetails({ openByDefault, children }) {
+  const [open, setOpen] = useState(openByDefault);
+  return (
+    <div style={{ border: "1px solid #EDE6D3", borderRadius: 14, overflow: "hidden" }}>
+      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open}
+        style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, padding: "16px 18px", background: open ? C.ivory : "#fff", border: "none", cursor: "pointer", textAlign: "left", font: "inherit" }}>
+        <span>
+          <span style={{ display: "block", fontWeight: 700, color: C.ink, fontSize: 14.5 }}>Fabric, stains &amp; special care</span>
+          <span style={{ display: "block", fontSize: 12.5, color: "#7A7466", marginTop: 2 }}>Optional — add anything that helps us clean it right</span>
+        </span>
+        <span style={{ color: C.accent, fontWeight: 800, fontSize: 20, lineHeight: 1 }} aria-hidden="true">{open ? "−" : "+"}</span>
+      </button>
+      {open && <div style={{ padding: "22px 18px 4px", borderTop: "1px solid #EDE6D3" }}>{children}</div>}
+    </div>
+  );
+}
+
 function SectionHeading({ children }) {
   return (
     <div style={{ fontSize: 12.5, fontWeight: 800, color: C.accent, textTransform: "uppercase", letterSpacing: 0.6, margin: "26px 0 14px", paddingBottom: 8, borderBottom: "1px solid #EDE6D3" }}>
@@ -311,66 +334,70 @@ export default function Booking() {
         {step === 1 && (
           <div>
             <SectionHeading>Item Details</SectionHeading>
-            <Field label="Material / Fabric" hint="Optional — helps us clean it correctly">
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
-                {MATERIAL_TYPES.map((m) => <Chip key={m} active={data.material === m} onClick={() => set("material", data.material === m ? "" : m)}>{m}</Chip>)}
-                <Chip active={data.material === "Other"} onClick={() => set("material", data.material === "Other" ? "" : "Other")}>Other</Chip>
-              </div>
-              {data.material === "Other" && (
-                <TextInput value={data.customMaterial} onChange={(e) => set("customMaterial", e.target.value)} placeholder="Describe the material" />
-              )}
-            </Field>
 
-            <Field label={metaFor(data.serviceSlug).qty.label} hint={metaFor(data.serviceSlug).qty.hint}>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <Panel>
+              <Field label={metaFor(data.serviceSlug).qty.label} hint={metaFor(data.serviceSlug).qty.hint}>
                 <TextInput value={data.quantityApprox} disabled={data.quantityUnsure} onChange={(e) => set("quantityApprox", e.target.value)} placeholder={metaFor(data.serviceSlug).qty.placeholder} />
-                <Chip active={data.quantityUnsure} onClick={() => set("quantityUnsure", !data.quantityUnsure)}>Not sure</Chip>
-              </div>
-            </Field>
-
-            <Field label="Type of clothing / items" hint="Select all that apply, or add your own">
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
-                {ITEM_TYPES.map((t) => <Chip key={t} active={!!data.items.find((i) => i.name === t)} onClick={() => toggleItemType(t)}>{t}</Chip>)}
-              </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <TextInput value={data.customItemText} onChange={(e) => set("customItemText", e.target.value)} placeholder="Other item — e.g. 2 school sweaters" />
-                <Button variant="subtle" onClick={addCustomItem}>Add</Button>
-              </div>
-              {data.items.length > 0 && (
-                <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
-                  {data.items.map((it, idx) => (
-                    <div key={idx} style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                      <div style={{ flex: 1, fontSize: 13, color: C.ink, fontWeight: 600 }}>{it.name}</div>
-                      <TextInput value={it.quantity} onChange={(e) => setItemQty(it.name, e.target.value)} placeholder="qty" style={{ width: 90 }} />
-                      <button onClick={() => removeItem(idx)} style={{ background: "none", border: "none", color: "#B23131", cursor: "pointer", fontSize: 12 }}>Remove</button>
-                    </div>
-                  ))}
+                <div style={{ marginTop: 12 }}>
+                  <Chip active={data.quantityUnsure} onClick={() => set("quantityUnsure", !data.quantityUnsure)}>I'm not sure</Chip>
                 </div>
-              )}
-            </Field>
+              </Field>
 
-            <Field label="Approximate weight" hint='Optional — e.g. "4.5 kg"'>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <Field label="Type of clothing / items" hint="Select all that apply, or add your own">
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 14 }}>
+                  {ITEM_TYPES.map((t) => <Chip key={t} active={!!data.items.find((i) => i.name === t)} onClick={() => toggleItemType(t)}>{t}</Chip>)}
+                </div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <TextInput value={data.customItemText} onChange={(e) => set("customItemText", e.target.value)} placeholder="Other item, e.g. school sweaters" />
+                  <Button variant="subtle" onClick={addCustomItem}>Add</Button>
+                </div>
+                {data.items.length > 0 && (
+                  <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 10 }}>
+                    {data.items.map((it, idx) => (
+                      <div key={idx} style={{ display: "flex", gap: 10, alignItems: "center", background: "#fff", border: "1px solid #EDE6D3", borderRadius: 10, padding: "8px 12px" }}>
+                        <div style={{ flex: 1, fontSize: 13.5, color: C.ink, fontWeight: 600 }}>{it.name}</div>
+                        <TextInput value={it.quantity} onChange={(e) => setItemQty(it.name, e.target.value)} placeholder="Qty" aria-label={`Quantity of ${it.name}`} style={{ width: 76, padding: "8px 10px" }} />
+                        <button type="button" onClick={() => removeItem(idx)} aria-label={`Remove ${it.name}`} style={{ background: "none", border: "none", color: "#B23131", cursor: "pointer", fontSize: 12.5, fontWeight: 600 }}>Remove</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Field>
+            </Panel>
+
+            <MoreDetails openByDefault={!!(data.material || data.weightApprox || data.weightUnsure || data.specialCare || data.stains.length || data.stainOther || data.generalNotes)}>
+              <Field label="Material / Fabric" hint="Helps us clean it correctly">
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 12 }}>
+                  {MATERIAL_TYPES.map((m) => <Chip key={m} active={data.material === m} onClick={() => set("material", data.material === m ? "" : m)}>{m}</Chip>)}
+                  <Chip active={data.material === "Other"} onClick={() => set("material", data.material === "Other" ? "" : "Other")}>Other</Chip>
+                </div>
+                {data.material === "Other" && (
+                  <TextInput value={data.customMaterial} onChange={(e) => set("customMaterial", e.target.value)} placeholder="Describe the material" />
+                )}
+              </Field>
+
+              <Field label="Approximate weight" hint='e.g. "4.5 kg"'>
                 <TextInput value={data.weightApprox} disabled={data.weightUnsure} onChange={(e) => set("weightApprox", e.target.value)} placeholder="e.g. 4.5 kg" />
-                <Chip active={data.weightUnsure} onClick={() => set("weightUnsure", !data.weightUnsure)}>Not sure</Chip>
-              </div>
-            </Field>
+                <div style={{ marginTop: 12 }}>
+                  <Chip active={data.weightUnsure} onClick={() => set("weightUnsure", !data.weightUnsure)}>I'm not sure</Chip>
+                </div>
+              </Field>
 
-            <SectionHeading>Additional Details</SectionHeading>
-            <Field label="Special care instructions" hint="Optional">
-              <TextArea value={data.specialCare} onChange={(e) => set("specialCare", e.target.value)} placeholder="e.g. Please handle the white dress separately." />
-            </Field>
+              <Field label="Stains or special concerns" hint="Select any that apply, or describe below">
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 12 }}>
+                  {STAIN_TYPES.map((s) => <Chip key={s} active={data.stains.includes(s)} onClick={() => toggleStain(s)}>{s}</Chip>)}
+                </div>
+                <TextInput value={data.stainOther} onChange={(e) => set("stainOther", e.target.value)} placeholder="Describe, e.g. red wine stain on the front" />
+              </Field>
 
-            <Field label="Any stains or special concerns?" hint="Select any that apply, or describe below">
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
-                {STAIN_TYPES.map((s) => <Chip key={s} active={data.stains.includes(s)} onClick={() => toggleStain(s)}>{s}</Chip>)}
-              </div>
-              <TextInput value={data.stainOther} onChange={(e) => set("stainOther", e.target.value)} placeholder="Describe — e.g. red wine stain on the front" />
-            </Field>
+              <Field label="Special care instructions">
+                <TextArea value={data.specialCare} onChange={(e) => set("specialCare", e.target.value)} placeholder="e.g. Please handle the white dress separately." />
+              </Field>
 
-            <Field label="Anything else we should know?" hint="Optional">
-              <TextArea value={data.generalNotes} onChange={(e) => set("generalNotes", e.target.value)} />
-            </Field>
+              <Field label="Anything else we should know?">
+                <TextArea value={data.generalNotes} onChange={(e) => set("generalNotes", e.target.value)} />
+              </Field>
+            </MoreDetails>
           </div>
         )}
 

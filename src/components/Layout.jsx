@@ -110,7 +110,7 @@ export function NavBar() {
 
   return (
     <header style={{ position: "sticky", top: 0, zIndex: 50, background: "rgba(11,11,11,0.97)", backdropFilter: "blur(8px)", borderBottom: `1px solid rgba(212,175,55,0.45)` }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "8px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "8px 12px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, minWidth: 0 }}>
         <Link to="/" aria-label={`${BRAND.name} — home`} style={{ flexShrink: 0, textDecoration: "none" }}>
           <Logo height={44} withWordmark />
         </Link>
@@ -189,8 +189,12 @@ export function NavBar() {
       <style>{`
         @media (min-width: 1000px) { .desktop-nav { display: flex !important; align-items: center; } .mobile-toggle { display: none !important; } }
         @media (max-width: 380px) { .mobile-toggle { width: 32px !important; height: 32px !important; } }
-        @media (max-width: 560px) { .brand-descriptor { display: none; } }
-        @media (max-width: 430px) { header .logo-words { display: none; } }
+        @media (max-width: 600px) {
+          .brand-descriptor { display: none; }
+          header .logo-words > span:first-child { font-size: 12px !important; letter-spacing: 1px !important; }
+          header .mobile-toggle { width: 34px !important; height: 34px !important; }
+        }
+        @media (max-width: 400px) { header .logo-words { display: none; } }
         @media (prefers-reduced-motion: reduce) { [role="dialog"], [role="presentation"] { animation: none !important; } }
         @keyframes hoh-fade { from { opacity: 0; } to { opacity: 1; } }
         @keyframes hoh-slide-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
@@ -205,7 +209,6 @@ const footHead = { fontFamily: FONT_DISPLAY, fontWeight: 700, color: C.goldLight
 export function Footer() {
   // No Admin/Worker link here on purpose — staff portals are reached only by direct URL.
   const { settings, socials } = useBusinessSettings();
-  const [showCredit, setShowCredit] = useState(false);
   const hours = settings.business_hours;
 
   return (
@@ -262,30 +265,18 @@ export function Footer() {
         © {new Date().getFullYear()} {settings.business_name || BRAND.name}. All rights reserved.
         {DEVELOPER_CREDIT && (
           <>
-            {" · "}
-            <button onClick={() => setShowCredit(true)} style={{ background: "none", border: "none", color: "#8C8571", fontSize: 12, cursor: "pointer", textDecoration: "underline", padding: 0 }}>Site by {DEVELOPER_CREDIT.name}</button>
+            {" · "}Built by{" "}
+            <a href={DEVELOPER_CREDIT.url} target="_blank" rel="noopener noreferrer" style={{ color: "#BDB5A0", textDecoration: "underline" }}>{DEVELOPER_CREDIT.name}</a>
           </>
         )}
       </div>
-
-      {DEVELOPER_CREDIT && showCredit && (
-        <div role="presentation" onMouseDown={(e) => e.target === e.currentTarget && setShowCredit(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-          <div role="dialog" aria-modal="true" aria-label="Developer contact" style={{ background: "#fff", color: C.ink, borderRadius: 16, width: "100%", maxWidth: 320, padding: 22, textAlign: "center" }}>
-            <div style={{ fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 17, marginBottom: 4 }}>{DEVELOPER_CREDIT.name}</div>
-            <div style={{ fontSize: 13, color: "#5F594D", marginBottom: 18 }}>Built and maintains this site</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <Button variant="primary" full onClick={() => { window.location.href = `tel:${DEVELOPER_CREDIT.phone}`; }}><Phone size={15} /> Call — {DEVELOPER_CREDIT.phone}</Button>
-              <Button variant="secondary" full onClick={() => { window.location.href = `mailto:${DEVELOPER_CREDIT.email}`; }}><Mail size={15} /> Email</Button>
-              <button onClick={() => setShowCredit(false)} style={{ marginTop: 6, background: "none", border: "none", color: "#7A7466", fontSize: 13, cursor: "pointer" }}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
     </footer>
   );
 }
 
 export function WhatsAppFloat({ message }) {
+  const { pathname } = useLocation();
+  if (pathname === "/booking") return null; // keeps the floating button off the form's own buttons
   const href = `${WA_BASE}?text=${encodeURIComponent(message || WA_GREETING)}`;
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" style={{
